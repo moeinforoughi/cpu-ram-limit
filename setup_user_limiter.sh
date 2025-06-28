@@ -2,7 +2,7 @@
 set -e
 
 ### CONFIG ###
-API_URL="http://192.168.4.2:8081/core/node/directadmin/:token/config"
+API_URL=""
 SCRIPT_PATH="/usr/local/bin/apply_user_limits.sh"
 LOG_DIR="/var/log/user-limiter"
 LOG_FILE="$LOG_DIR/user_limit_sync.log"
