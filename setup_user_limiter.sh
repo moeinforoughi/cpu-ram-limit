@@ -1,11 +1,12 @@
 #!/bin/bash
 set -e
 
-API_URL=""
+API_URL="http://your.api.endpoint"  # <-- UPDATE THIS URL
 SCRIPT_SOURCE="./apply_user_limits.sh"
 SCRIPT_TARGET="/usr/local/bin/apply_user_limits.sh"
 LOG_DIR="/var/log/user-limiter"
 LOG_FILE="$LOG_DIR/user_limit_sync.log"
+LOGROTATE_FILE="/etc/logrotate.d/user-limiter"
 
 # Step 1: Dependencies
 echo "🔧 Installing required packages..."
@@ -17,9 +18,13 @@ echo "🛠️ Creating log directory..."
 mkdir -p "$LOG_DIR"
 touch "$LOG_FILE"
 chmod 644 "$LOG_FILE"
+chown root:root "$LOG_FILE"
 
-# Step 3: Copy script
+# Step 3: Copy script (backup if exists)
 echo "📂 Copying main sync script to: $SCRIPT_TARGET"
+if [[ -f "$SCRIPT_TARGET" ]]; then
+  cp "$SCRIPT_TARGET" "$SCRIPT_TARGET.bak.$(date +%s)"
+fi
 cp "$SCRIPT_SOURCE" "$SCRIPT_TARGET"
 chmod +x "$SCRIPT_TARGET"
 
@@ -53,6 +58,19 @@ echo "🔄 Enabling systemd timer..."
 systemctl daemon-reexec
 systemctl daemon-reload
 systemctl enable --now user-limiter.timer
+
+# Step 6: Add logrotate config (optional but helpful)
+echo "📅 Setting up log rotation..."
+cat <<EOF > "$LOGROTATE_FILE"
+$LOG_FILE {
+  weekly
+  rotate 4
+  compress
+  missingok
+  notifempty
+  create 644 root root
+}
+EOF
 
 echo "✅ Setup complete. Limits will sync every minute."
 echo "📄 Logs available at: $LOG_FILE"
