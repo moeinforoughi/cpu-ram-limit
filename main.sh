@@ -3,11 +3,14 @@
 
 ### Configuration
 API_URL=""
-LOG_FILE="/var/log/user-limiter/user_limit_sync.log"
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+LOG_FILE="$SCRIPT_DIR/logs/user_limit_sync.log"
 TMP_JSON="/tmp/user_limits.json"
 PERIOD=100000
 LOCKFILE="/tmp/apply_user_limits.lock"
-
+### Make log directory and file 
+mkdir -p "$(dirname "$LOG_FILE")"
+touch "$LOG_FILE"
 ### Lock to prevent concurrent execution
 exec 9>"$LOCKFILE"
 flock -n 9 || {
