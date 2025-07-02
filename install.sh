@@ -73,5 +73,12 @@ $LOG_FILE {
 }
 EOF
 
+# Step 2.5: Setup cron cleanup (truncate log at 2:00 AM daily)
+echo "🧹 Setting up daily log cleanup at 2:00 AM..."
+CRON_CLEAN_LINE="0 2 * * * root truncate -s 0 \"$LOG_FILE\""
+CRON_CLEAN_FILE="/etc/cron.d/user-limiter-log-cleanup"
+echo "$CRON_CLEAN_LINE" > "$CRON_CLEAN_FILE"
+chmod 644 "$CRON_CLEAN_FILE"
+
 echo "✅ Setup complete. Limits will sync every minute."
 echo "📄 Logs available at: $LOG_FILE"
