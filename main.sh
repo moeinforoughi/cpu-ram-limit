@@ -1,5 +1,5 @@
 #!/bin/bash
-# apply_user_limits.sh — Syncs user CPU and RAM limits via API and cgroups (v1/v2)
+# main.sh — Syncs user CPU and RAM limits via API and cgroups (v1/v2)
 
 ### Configuration
 API_URL=""
