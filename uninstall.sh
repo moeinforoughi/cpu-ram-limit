@@ -2,7 +2,7 @@
 set -e
 
 SERVICE_NAME="user-limiter"
-SCRIPT_PATH="/usr/local/bin/apply_user_limits.sh"
+SCRIPT_PATH="/usr/local/bin/main.sh"
 LOG_DIR="/var/log/user-limiter"
 LOGROTATE_FILE="/etc/logrotate.d/user-limiter"
 SYSTEMD_SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}.service"
