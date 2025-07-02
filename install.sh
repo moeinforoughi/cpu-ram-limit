@@ -1,10 +1,11 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR="$(dirname \"$(realpath "$0")")"
 API_URL="http://your.api.endpoint"  # <-- UPDATE THIS URL
-SCRIPT_SOURCE="./apply_user_limits.sh"
+SCRIPT_SOURCE="$SCRIPT_DIR/apply_user_limits.sh"
 SCRIPT_TARGET="/usr/local/bin/apply_user_limits.sh"
-LOG_DIR="/var/log/user-limiter"
+LOG_DIR="$SCRIPT_DIR/logs"
 LOG_FILE="$LOG_DIR/user_limit_sync.log"
 LOGROTATE_FILE="/etc/logrotate.d/user-limiter"
 
