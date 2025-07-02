@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-SCRIPT_DIR="$(dirname \"$(realpath "$0")")"
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 API_URL="http://your.api.endpoint"  # <-- UPDATE THIS URL
 SCRIPT_SOURCE="$SCRIPT_DIR/main.sh"
 SCRIPT_TARGET="/usr/local/bin/main.sh"
