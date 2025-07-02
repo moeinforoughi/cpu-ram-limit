@@ -3,7 +3,8 @@ set -e
 
 SERVICE_NAME="user-limiter"
 SCRIPT_PATH="/usr/local/bin/main.sh"
-LOG_DIR="/var/log/user-limiter"
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+LOG_DIR="$SCRIPT_DIR/logs"
 LOGROTATE_FILE="/etc/logrotate.d/user-limiter"
 SYSTEMD_SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}.service"
 SYSTEMD_TIMER_FILE="/etc/systemd/system/${SERVICE_NAME}.timer"
@@ -28,6 +29,10 @@ systemctl daemon-reload
 # Remove script
 echo "🔧 Removing user-limiter script..."
 rm -f "$SCRIPT_PATH"
+
+# Remove log cleanup cron
+CRON_CLEAN_FILE="/etc/cron.d/user-limiter-log-cleanup"
+rm -f "$CRON_CLEAN_FILE"
 
 # Remove logs and logrotate
 echo "📄 Cleaning logs..."
