@@ -21,13 +21,22 @@ touch "$LOG_FILE"
 chmod 644 "$LOG_FILE"
 chown root:root "$LOG_FILE"
 
-# Step 3: Copy script (backup if exists)
-echo "📂 Copying main sync script to: $SCRIPT_TARGET"
+# Step 3: Prepare and patch main script
+echo "📂 Preparing main sync script..."
 if [[ -f "$SCRIPT_TARGET" ]]; then
   cp "$SCRIPT_TARGET" "$SCRIPT_TARGET.bak.$(date +%s)"
 fi
-cp "$SCRIPT_SOURCE" "$SCRIPT_TARGET"
+
+# Patch the log path in main.sh before copying
+PATCHED_MAIN="$SCRIPT_DIR/main.tmp.sh"
+cp "$SCRIPT_SOURCE" "$PATCHED_MAIN"
+
+ABS_LOG_FILE="$LOG_FILE"
+sed -i "s|^LOG_FILE=.*|LOG_FILE=\"$ABS_LOG_FILE\"|" "$PATCHED_MAIN"
+
+cp "$PATCHED_MAIN" "$SCRIPT_TARGET"
 chmod +x "$SCRIPT_TARGET"
+rm "$PATCHED_MAIN"
 
 # Step 4: systemd service + timer
 echo "⚙️ Creating systemd unit files..."
